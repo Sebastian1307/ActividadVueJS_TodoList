@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+    <title>TO DO LIST // Sebastian Beltran</title>
+  </head>
+  <body
+    class="bg-gradient-to-br from-[#062F4F] via-[#813772] to-[#B82601] min-h-screen flex items-center justify-center p-4 sm:p-6"
+  >
+    <div
+      id="app"
+      class="w-full max-w-2xl bg-white/30 backdrop-blur-xl border border-white/20 shadow-2xl rounded-3xl p-6 sm:p-8"
+    >
+      <!-- Título -->
+      <h1
+        class="text-4xl sm:text-5xl md:text-6xl font-extrabold text-center text-gray-900 mb-4 sm:mb-6 tracking-wide"
+      >
+        TODO List
+      </h1>
+      <h2 class="text-sm sm:text-base md:text-lg font-semibold text-center text-gray-900 mb-6 sm:mb-8">
+        Por Sebastian Beltran
+      </h2>
+      <h3 class="text-sm sm:text-base md:text-lg font-regular text-center text-gray-900 mb-6 sm:mb-8">INSTRUCCIONES <br>Ingresa la tarea escribiendola y dandole a agregar, para marcarla como completada, haz click sobre el texto de la tarea, y para eliminarla haz click en el icono X de la tarea</h3>
+
+      <!-- Input + botón -->
+      <div class="flex flex-col sm:flex-row mb-6 gap-3">
+        <input
+          v-model="nuevaTarea"
+          @keyup.enter="agregarTarea"
+          type="text"
+          placeholder="Escribe una nueva tarea..."
+          class="flex-1 px-4 py-3 border rounded-xl shadow-md focus:outline-none focus:ring-2 focus:ring-[#813772] text-sm sm:text-base"
+        />
+        <button
+          @click="agregarTarea"
+          class="bg-[#B82601] text-white px-5 py-3 rounded-xl shadow-md hover:bg-red-700 transition font-semibold text-sm sm:text-base"
+        >
+          Agregar
+        </button>
+      </div>
+
+      <!-- Lista -->
+      <ul class="space-y-3">
+        <li
+          v-for="(tarea, index) in tareas"
+          :key="index"
+          class="flex justify-between items-center p-3 sm:p-4 rounded-xl shadow-sm bg-gray-100 hover:bg-gray-200 transition"
+        >
+          <span
+            @click="toggleCompletada(index)"
+            class="flex-1 cursor-pointer select-none text-base sm:text-lg"
+            :class="tarea.completada ? 'line-through text-gray-400 italic' : 'text-gray-800'"
+          >
+            {{ tarea.texto }}
+          </span>
+
+          <button
+            @click="abrirModal(index)"
+            class="text-[#B82601] hover:text-red-700 text-lg sm:text-xl font-bold transition ml-2"
+          >
+            ✕
+          </button>
+        </li>
+      </ul>
+
+      <div
+        v-if="modalAbierto"
+        class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4"
+      >
+        <div
+          class="bg-white/90 backdrop-blur-md rounded-2xl p-6 sm:p-8 shadow-2xl w-11/12 sm:max-w-sm text-center"
+        >
+          <h2 class="text-lg sm:text-xl font-bold mb-3 sm:mb-4">¿Eliminar tarea?</h2>
+          <p class="mb-5 sm:mb-6 text-gray-600 text-sm sm:text-base">Esta acción no se puede deshacer.</p>
+          <div class="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4">
+            <button
+              @click="confirmarEliminar"
+              class="bg-[#B82601] text-white px-4 sm:px-5 py-2 rounded-xl hover:bg-red-700 transition text-sm sm:text-base"
+            >
+              Sí, eliminar
+            </button>
+            <button
+              @click="cerrarModal"
+              class="bg-gray-300 px-4 sm:px-5 py-2 rounded-xl hover:bg-gray-400 transition text-sm sm:text-base"
+            >
+              Cancelar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="src/main.js"></script>
+  </body>
+</html>
